@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
 
     DeliveryItem oneItem;
     int pos;
+    Context context;
     MainActivity ma;
 
 
@@ -30,14 +32,18 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
     {
         super(context,R.layout.custom_row,items);
         ma=(MainActivity) context;
-
+        this.context=context;
 
     }
 
     @Override
-    public View getView( int position, View convertView, ViewGroup parent) {
-        LayoutInflater inflater =LayoutInflater.from(getContext());
-        View customView= inflater.inflate(R.layout.custom_row,parent,false);
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        View customView = convertView;
+
+        if( customView==null)
+        {
+            customView=LayoutInflater.from(context).inflate(R.layout.custom_row,parent,false);
+        }
         pos=position;
         oneItem=getItem(position);
         TextView item =(TextView) customView.findViewById(R.id.txt_Item);
@@ -67,55 +73,9 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(ma.getApplicationContext(),"click",Toast.LENGTH_SHORT).show();
-
+                ((ListView)parent).performItemClick(v,position,oneItem.ID);
             }
         });
-
-
-
-
-
-       /* if(convertView!=null)
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(((MenuItem)ma.findViewById(R.id.menu_reorder)).isChecked())
-                {
-                    if(ma.tmp1==null)
-                    {
-                        ma.tmp1=oneItem;
-                        ma.tmp1_pos=pos;
-                    }
-                    else
-                    {
-                        ma.items[ma.tmp1_pos]=oneItem;
-                        ma.items[pos]=ma.tmp1;
-                        ma.tmp1 = null;
-                        ma.lw.invalidate();
-                    }
-                }
-            }
-        });
-        if(convertView!=null)
-        convertView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });
-
-       /* lw.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if(((MenuItem)findViewById(R.id.menu_reorder)).isChecked())
-                {
-                    tmp1=(DeliveryItem) parent.getItemAtPosition(position);
-                }
-            }
-        });*/
         return customView;
         }
 
