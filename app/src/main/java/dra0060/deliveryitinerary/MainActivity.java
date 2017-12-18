@@ -49,6 +49,8 @@ public class MainActivity extends Activity {
         );
 
 
+        DBHelper db = new DBHelper(this);
+
     }
 
     @Override
