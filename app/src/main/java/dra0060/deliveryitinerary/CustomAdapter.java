@@ -34,7 +34,10 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
         ma=(MainActivity) context;
         this.context=context;
 
+
     }
+
+
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {

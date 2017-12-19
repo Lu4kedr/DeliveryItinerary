@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Delivery Itinerary</string>
+    <string name="title_activity_maps">ItemAdress</string>
 </resources>

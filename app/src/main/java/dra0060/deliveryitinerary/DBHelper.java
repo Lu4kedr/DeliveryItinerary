@@ -25,6 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String ITINERARY_COLUMN_GPSLAT = "gpslat";
     public static final String ITINERARY_COLUMN_GPSLONG= "gpslong";
     public static final String ITINERARY_COLUMN_DISTRICT= "district";
+    public static final String ITINERARY_COLUMN_STATE= "state";
 
     private HashMap hp;
 
@@ -35,29 +36,34 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
-        //db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL("DROP TABLE IF EXISTS contacts");
         db.execSQL(
-                "create table contacts " +
-                        "(id integer primary key autoincrement, name text,address text,note text, gpslat text,gpslong text,district integer)"
+                "create table itinerary " +
+                        "(id integer primary key autoincrement, name text,address text,note text, gpslat double,gpslong double,district integer, state integer)"
         );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL("DROP TABLE IF EXISTS itinerary");
         onCreate(db);
     }
 
-    public boolean insertDelivery (String name,int district, String address, String note, double gpsLat,double gpsLong) {
+
+
+    public boolean insertDelivery (DeliveryItem item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("address", address);
-        contentValues.put("note", note);
-        contentValues.put("gpslat", gpsLat);
-        contentValues.put("gpslong", gpsLong);
-        contentValues.put("district", district);
+        if(item.ID>0)
+            contentValues.put("id", item.ID);
+        contentValues.put("name", item.name);
+        contentValues.put("address", item.address);
+        contentValues.put("note", item.note);
+        contentValues.put("gpslat", item.gpsLat);
+        contentValues.put("gpslong", item.gpsLong);
+        contentValues.put("district", item.district);
+        contentValues.put("state", item.state);
         db.insert("itinerary", null, contentValues);
         return true;
     }
@@ -67,6 +73,23 @@ public class DBHelper extends SQLiteOpenHelper {
         Cursor res =  db.rawQuery( "select * from itinerary where id="+id+"", null );
         return res;
     }
+    public DeliveryItem getItem(int ItemID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from itinerary where id="+ItemID, null );
+        DeliveryItem di =null;
+        if(res.moveToFirst()) {
+            di=new DeliveryItem();
+            di.note = res.getString(res.getColumnIndex(ITINERARY_COLUMN_NOTE));
+            di.state = res.getInt(res.getColumnIndex(ITINERARY_COLUMN_STATE));
+            di.gpsLong = res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLONG));
+            di.gpsLat = res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLAT));
+            di.address = res.getString(res.getColumnIndex(ITINERARY_COLUMN_ADDRESS));
+            di.district = res.getInt(res.getColumnIndex(ITINERARY_COLUMN_DISTRICT));
+            di.name = res.getString(res.getColumnIndex(ITINERARY_COLUMN_NAME));
+            di.ID = res.getInt(res.getColumnIndex(ITINERARY_COLUMN_ID));
+        }
+        return di;
+    }
 
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
@@ -74,7 +97,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateDelivery(Integer id, String name,int district, String address, String note, double gpsLat,double gpsLong) {
+    public boolean updateDelivery(Integer id, String name,int district,int state, String address, String note, double gpsLat,double gpsLong) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", name);
@@ -83,29 +106,90 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put("gpslat", gpsLat);
         contentValues.put("gpslong", gpsLong);
         contentValues.put("district", district);
+        contentValues.put("state", state);
         db.update("itinerary", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
         return true;
     }
 
     public Integer deleteDelivery(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete("contacts",
+        return db.delete("itinerary",
                 "id = ? ",
                 new String[] { Integer.toString(id) });
     }
 
-    public ArrayList<String> getAllCotacts() {
-        ArrayList<String> array_list = new ArrayList<String>();
+    public DeliveryItem[] getAllDelivery() {
+        ArrayList<DeliveryItem> array_list = new ArrayList<DeliveryItem>();
 
         //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts", null );
+        Cursor res =  db.rawQuery( "select * from itinerary order by id", null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(CONTACTS_COLUMN_NAME)));
+            DeliveryItem di = new DeliveryItem();
+            di.note=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NOTE));
+            di.state=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_STATE));
+            di.gpsLong=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLONG));
+            di.gpsLat=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLAT));
+            di.address=res.getString(res.getColumnIndex(ITINERARY_COLUMN_ADDRESS));
+            di.name=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NAME));
+            di.ID=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_ID));
+            di.district=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_DISTRICT));
+
+            // TODO load fromDB
+            // TODO list switch items
+
+
+            array_list.add(di);
             res.moveToNext();
         }
-        return array_list;
+        res.close();
+        return array_list.toArray(new DeliveryItem[array_list.size()]);
+    }
+
+    public void switchItems(int id1,int id2)
+    {
+        int idtmp1,idtmp2;
+        DeliveryItem tmp1= this.getItem(id1);
+        DeliveryItem tmp2= this.getItem(id2);
+
+        idtmp1=tmp1.ID;
+        idtmp2=tmp2.ID;
+
+        tmp1.ID=idtmp2;
+        tmp2.ID=idtmp1;
+
+        this.deleteDelivery(id1);
+        this.deleteDelivery(id2);
+
+        this.insertDelivery(tmp1);
+        this.insertDelivery(tmp2);
+
+    }
+
+    public DeliveryItem[] getDistinctDelivery(int distID) {
+        ArrayList<DeliveryItem> array_list = new ArrayList<DeliveryItem>();
+
+        //hp = new HashMap();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from itinerary where district ="+distID+" order by id",null);
+        res.moveToFirst();
+
+        while(res.isAfterLast() == false){
+            DeliveryItem di = new DeliveryItem();
+            di.note=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NOTE));
+            di.state=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_STATE));
+            di.gpsLong=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLONG));
+            di.gpsLat=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLAT));
+            di.address=res.getString(res.getColumnIndex(ITINERARY_COLUMN_ADDRESS));
+            di.name=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NAME));
+            di.ID=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_ID));
+
+            array_list.add(di);
+            res.moveToNext();
+        }
+        res.close();
+        return array_list.toArray(new DeliveryItem[array_list.size()]);
     }
 }
