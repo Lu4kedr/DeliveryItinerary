@@ -5,10 +5,14 @@ import android.os.Bundle;
 
 public class AddDeliveryItem extends Activity {
 
-    public DBHelper db; 
+    public DBHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_delivery_item);
+        if(MainActivity.db!=null)
+            db=MainActivity.db;
+        else
+            db=new DBHelper(getApplicationContext());
     }
 }

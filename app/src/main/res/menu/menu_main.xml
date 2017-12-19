@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/menu_reorder"
@@ -7,5 +8,12 @@
         android:enabled="true"
         android:title="Reorder"
         android:visible="true" />
-    <item android:title="Item" />
+    <item
+        android:id="@+id/AddItem"
+        android:enabled="true"
+        android:title="Add"
+        android:visible="true" />
+    <item
+        android:id="@+id/menu_getloc"
+        android:title="GetLoc" />
 </menu>

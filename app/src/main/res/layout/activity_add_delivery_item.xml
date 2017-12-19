@@ -6,4 +6,258 @@
     android:layout_height="match_parent"
     tools:context="dra0060.deliveryitinerary.AddDeliveryItem">
 
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteY="64dp">
+
+            <TextView
+                android:id="@+id/textView21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Name"
+                app:layout_constraintBottom_toTopOf="@+id/textView22"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/textView22"
+                android:layout_width="159dp"
+                android:layout_height="49dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="TextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/textView23"
+                android:layout_width="144dp"
+                android:layout_height="49dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="24dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.515"
+                app:layout_constraintStart_toEndOf="@+id/textView22"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="ID"
+                app:layout_constraintBottom_toTopOf="@+id/textView23"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.486"
+                app:layout_constraintStart_toEndOf="@+id/textView21"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Note"
+                app:layout_constraintBottom_toTopOf="@+id/textView26"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.024"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <EditText
+                android:id="@+id/textView26"
+                android:layout_width="339dp"
+                android:layout_height="49dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.517" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView27"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="GPS Coord"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/textView28"
+                android:layout_width="159dp"
+                android:layout_height="49dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toStartOf="@+id/textView29"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/textView29"
+                android:layout_width="159dp"
+                android:layout_height="49dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="40dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView30"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Latitude "
+                app:layout_constraintBottom_toTopOf="@+id/textView28"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+            <TextView
+                android:id="@+id/textView31"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Longitude"
+                app:layout_constraintBottom_toTopOf="@+id/textView29"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.52"
+                app:layout_constraintStart_toEndOf="@+id/textView30" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="Address"
+                app:layout_constraintBottom_toTopOf="@+id/textView33"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/textView33"
+                android:layout_width="341dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="25dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/textView34"
+                android:layout_width="170dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="28dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toStartOf="@+id/textView36"
+                app:layout_constraintHorizontal_bias="0.38"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView35"
+                android:layout_width="34dp"
+                android:layout_height="22dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="State"
+                app:layout_constraintBottom_toTopOf="@+id/textView34"
+                app:layout_constraintEnd_toStartOf="@+id/textView37"
+                app:layout_constraintHorizontal_bias="0.03"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <EditText
+                android:id="@+id/textView36"
+                android:layout_width="145dp"
+                android:layout_height="47dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="28dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView37"
+                android:layout_width="wrap_content"
+                android:layout_height="19dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="116dp"
+                android:layout_marginTop="8dp"
+                android:text="District"
+                app:layout_constraintBottom_toTopOf="@+id/textView36"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

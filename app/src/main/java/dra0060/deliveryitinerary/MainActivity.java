@@ -1,8 +1,19 @@
 package dra0060.deliveryitinerary;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,21 +24,26 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    public DeliveryItem tmp1=null;
-    public int selecteditem1=-666;
-    public int selecteditem2=-666;
+    public DeliveryItem tmp1 = null;
+    public int selecteditem1 = -666;
+    public int selecteditem2 = -666;
     public boolean reorder;
-    public  DBHelper db=null;
+    public static DBHelper db = null;
     public CustomAdapter lwAdapter;
 
+    private LocationManager locManag;
+    private LocationListener locLis;
+    public double actualLat,actualLong;
+
     public ListView lw;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         db = new DBHelper(this);
-        lw =(ListView) findViewById(R.id.lv_itinerary);
+        lw = (ListView) findViewById(R.id.lv_itinerary);
        /* DeliveryItem[] items = {
                 new DeliveryItem("Name1","Note","Address",2.343,4.3434,0,1),
                 new DeliveryItem("Name2","Note","Address",2.343,4.3434,2,2),
@@ -41,9 +57,7 @@ public class MainActivity extends Activity {
             db.insertDelivery(item);
         }*/
 
-        lwAdapter= new CustomAdapter(this, db.getAllDelivery());
-
-
+        lwAdapter = new CustomAdapter(this, db.getAllDelivery());
 
 
         lw.setAdapter(lwAdapter);
@@ -53,45 +67,78 @@ public class MainActivity extends Activity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                       // Toast.makeText(getApplicationContext(),((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
-                        if(reorder){
-                            if(selecteditem1<0) {
-                                Toast.makeText(getApplicationContext(),"Selected: "+((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(),((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
+                        if (reorder) {
+                            if (selecteditem1 < 0) {
+                                Toast.makeText(getApplicationContext(), "Selected: " + ((DeliveryItem) parent.getItemAtPosition(position)).name, Toast.LENGTH_SHORT).show();
 
                                 selecteditem1 = ((DeliveryItem) parent.getItemAtPosition(position)).ID;
-                            }
-                            else if(selecteditem2<0)
-                            {
-                                Toast.makeText(getApplicationContext(),"Moved: "+((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
+                            } else if (selecteditem2 < 0) {
+                                Toast.makeText(getApplicationContext(), "Moved: " + ((DeliveryItem) parent.getItemAtPosition(position)).name, Toast.LENGTH_SHORT).show();
 
-                                selecteditem2=((DeliveryItem) parent.getItemAtPosition(position)).ID;
+                                selecteditem2 = ((DeliveryItem) parent.getItemAtPosition(position)).ID;
 
-                                db.switchItems(selecteditem1,selecteditem2);
-                                selecteditem2=-666;
-                                selecteditem1=-666;
+                                db.switchItems(selecteditem1, selecteditem2);
+                                selecteditem2 = -666;
+                                selecteditem1 = -666;
 
                                 RefreshList(db.getAllDelivery());
 
 
                             }
 
-                        }
-                        else
-                        {
-                            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-                            intent.putExtra("lat",((DeliveryItem) parent.getItemAtPosition(position)).gpsLat);
-                            intent.putExtra("long",((DeliveryItem) parent.getItemAtPosition(position)).gpsLong);
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                            intent.putExtra("lat", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLat);
+                            intent.putExtra("long", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLong);
 
                             startActivity(intent);
 
                         }
                     }
                 }
+
         );
 
 
+        locManag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locLis = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                actualLong= location.getLongitude();
+                actualLat=location.getLatitude();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(new String[]{
+                        Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.INTERNET
+                },10);
+            }
+            return;
+        }
+        locManag.requestLocationUpdates("gps", 5000, 10, locLis);
+
 
     }
+
+
+
 
     public void RefreshList(DeliveryItem[] items)
     {
@@ -112,6 +159,14 @@ public class MainActivity extends Activity {
             case R.id.menu_reorder:
                 item.setChecked(!item.isChecked());
                 reorder=item.isChecked();
+
+                break;
+            case R.id.AddItem:
+                Intent intent = new Intent(getApplicationContext(),AddDeliveryItem.class);
+
+                startActivity(intent);
+                break;
+            case R.id.menu_getloc:
 
                 break;
         }
