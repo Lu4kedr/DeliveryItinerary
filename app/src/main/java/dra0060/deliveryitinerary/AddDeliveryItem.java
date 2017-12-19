@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 public class AddDeliveryItem extends Activity {
 
-    public DBHelper db;
+    public DBHelper db; 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
