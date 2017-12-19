@@ -75,6 +75,8 @@ public class MainActivity extends Activity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         // Toast.makeText(getApplicationContext(),((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
+
+
                         if (reorder) {
                             if (selecteditem1 < 0) {
                                 Toast.makeText(getApplicationContext(), "Selected: " + ((DeliveryItem) parent.getItemAtPosition(position)).name, Toast.LENGTH_SHORT).show();
@@ -95,6 +97,27 @@ public class MainActivity extends Activity {
                             }
 
                         } else {
+                            if(id==-1) //Visited
+                            {
+                                //Toast.makeText(getApplicationContext(),"Visited",Toast.LENGTH_SHORT).show();
+
+                                // TODO gesture
+                                DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
+                                di.state=1;
+                                db.updateDelivery(di);
+                                RefreshList(db.getAllDelivery());
+                                return;
+                            }
+                            if(id==-2) // UnVisited
+                            {
+                                // Toast.makeText(getApplicationContext(),"UN Visited",Toast.LENGTH_SHORT).show();
+                                DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
+                                di.state=2;
+                                db.updateDelivery(di);
+                                RefreshList(db.getAllDelivery());
+                                return;
+                            }
+
                             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                             intent.putExtra("lat", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLat);
                             intent.putExtra("long", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLong);
@@ -139,7 +162,7 @@ public class MainActivity extends Activity {
             }
             return;
         }
-        locManag.requestLocationUpdates("gps", 5000, 10, locLis);
+        locManag.requestLocationUpdates("gps", 5000, 5, locLis);
 
 
     }

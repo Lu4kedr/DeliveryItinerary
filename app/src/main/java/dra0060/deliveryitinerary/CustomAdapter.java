@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -53,6 +54,9 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
         TextView address =(TextView) customView.findViewById(R.id.txt_address);
         TextView note =(TextView) customView.findViewById(R.id.txt_note);
         LinearLayout layout =(LinearLayout) customView.findViewById(R.id.layout);
+        Button visited = (Button) customView.findViewById(R.id.btn_visited);
+
+        Button unVisited = (Button) customView.findViewById(R.id.btn_unVisited);
 
         item.setText(oneItem.name);
         address.setText(oneItem.address);
@@ -77,6 +81,20 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
             @Override
             public void onClick(View v) {
                 ((ListView)parent).performItemClick(v,position,oneItem.ID);
+            }
+        });
+
+        visited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView)parent).performItemClick(v,position,-1);
+            }
+        });
+
+        unVisited.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((ListView)parent).performItemClick(v,position,-2);
             }
         });
         return customView;
