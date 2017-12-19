@@ -6,10 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.AssetFileDescriptor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,8 +24,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class MainActivity extends Activity {
 
+    final MediaPlayer mp = new MediaPlayer();
     public DeliveryItem tmp1 = null;
     public int selecteditem1 = -666;
     public int selecteditem2 = -666;
@@ -33,8 +39,7 @@ public class MainActivity extends Activity {
 
     private LocationManager locManag;
     private LocationListener locLis;
-    public double actualLat,actualLong;
-
+    public Location actualLoc;
     public ListView lw;
 
     @Override
@@ -57,6 +62,8 @@ public class MainActivity extends Activity {
             db.insertDelivery(item);
         }*/
 
+     //  DeliveryItem itt= new DeliveryItem("Doma2","Luke","FM",49.680476,18.359500,0,1);
+       // db.insertDelivery(itt);
         lwAdapter = new CustomAdapter(this, db.getAllDelivery());
 
 
@@ -105,8 +112,8 @@ public class MainActivity extends Activity {
         locLis = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
-                actualLong= location.getLongitude();
-                actualLat=location.getLatitude();
+                actualLoc=location;
+                    CheckPosition();
             }
 
             @Override
@@ -138,6 +145,42 @@ public class MainActivity extends Activity {
     }
 
 
+    private void CheckPosition()
+    {
+        Location tmp;
+        DeliveryItem[] arr = db.getAllDelivery();
+        for (DeliveryItem di: arr) {
+            tmp=new Location("tmp");
+            tmp.setLatitude(di.gpsLat);
+            tmp.setLongitude(di.gpsLong);
+            int distance =(int) actualLoc.distanceTo(tmp);
+            if(distance<15 && di.state==0 )
+            {
+                di.state=1;
+                db.updateDelivery(di);
+
+                if(mp.isPlaying())
+                {
+                    mp.stop();
+                }
+
+                try {
+                    mp.reset();
+                    AssetFileDescriptor afd;
+                    afd = getAssets().openFd("notif.mp3");
+                    mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                    mp.prepare();
+                    mp.start();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            RefreshList(db.getAllDelivery());
+        }
+    }
 
 
     public void RefreshList(DeliveryItem[] items)

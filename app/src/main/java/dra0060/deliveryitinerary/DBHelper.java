@@ -111,6 +111,20 @@ public class DBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public boolean updateDelivery(DeliveryItem item) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", item.name);
+        contentValues.put("address", item.address);
+        contentValues.put("note", item.note);
+        contentValues.put("gpslat", item.gpsLat);
+        contentValues.put("gpslong", item.gpsLong);
+        contentValues.put("district", item.district);
+        contentValues.put("state", item.state);
+        db.update("itinerary", contentValues, "id = ? ", new String[] { Integer.toString(item.ID) } );
+        return true;
+    }
+
     public Integer deleteDelivery(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete("itinerary",
