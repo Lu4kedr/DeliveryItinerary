@@ -43,6 +43,16 @@ public class MainActivity extends Activity {
     public ListView lw;
 
     @Override
+    public  void onResume()
+    {
+        super.onResume();
+
+        RefreshList(db.getAllDelivery());
+
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -152,7 +162,8 @@ public class MainActivity extends Activity {
 
             @Override
             public void onProviderDisabled(String provider) {
-
+                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(intent);
             }
         };
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -234,8 +245,10 @@ public class MainActivity extends Activity {
 
     public void RefreshList(DeliveryItem[] items)
     {
+        int posit = lw.getLastVisiblePosition();
         lwAdapter= new CustomAdapter(this, db.getAllDelivery());
         lw.setAdapter(lwAdapter);
+        lw.setSelection(posit);
     }
 
     @Override
