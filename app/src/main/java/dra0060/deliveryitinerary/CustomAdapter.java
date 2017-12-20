@@ -76,13 +76,7 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
                 break;
         }
         layout.getBackground().setAlpha(20);
-/*
-        layout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((ListView)parent).performItemClick(v,position,oneItem.ID);
-            }
-        });*/
+
 
         layout.setOnTouchListener(new OnSwipeTouchListener(context)
         {

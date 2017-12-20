@@ -27,7 +27,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String ITINERARY_COLUMN_DISTRICT= "district";
     public static final String ITINERARY_COLUMN_STATE= "state";
 
-    private HashMap hp;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -35,7 +34,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // TODO Auto-generated method stub
        // db.execSQL("DROP TABLE IF EXISTS contacts");
         db.execSQL(
                 "create table itinerary " +
@@ -143,7 +141,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public DeliveryItem[] getAllDelivery() {
         ArrayList<DeliveryItem> array_list = new ArrayList<DeliveryItem>();
 
-        //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from itinerary order by id", null );
         res.moveToFirst();
@@ -190,28 +187,4 @@ public class DBHelper extends SQLiteOpenHelper {
 
     }
 
-    public DeliveryItem[] getDistinctDelivery(int distID) {
-        ArrayList<DeliveryItem> array_list = new ArrayList<DeliveryItem>();
-
-        //hp = new HashMap();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from itinerary where district ="+distID+" order by id",null);
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-            DeliveryItem di = new DeliveryItem();
-            di.note=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NOTE));
-            di.state=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_STATE));
-            di.gpsLong=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLONG));
-            di.gpsLat=res.getDouble(res.getColumnIndex(ITINERARY_COLUMN_GPSLAT));
-            di.address=res.getString(res.getColumnIndex(ITINERARY_COLUMN_ADDRESS));
-            di.name=res.getString(res.getColumnIndex(ITINERARY_COLUMN_NAME));
-            di.ID=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_ID));
-
-            array_list.add(di);
-            res.moveToNext();
-        }
-        res.close();
-        return array_list.toArray(new DeliveryItem[array_list.size()]);
-    }
 }

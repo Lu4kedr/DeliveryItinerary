@@ -36,18 +36,15 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
 
     final MediaPlayer mp = new MediaPlayer();
-    public DeliveryItem tmp1 = null;
     public int selecteditem1 = -666;
     public int selecteditem2 = -666;
     public boolean reorder;
     public static DBHelper db = null;
     public CustomAdapter lwAdapter;
-    private String m_chosen;
     private LocationManager locManag;
     private LocationListener locLis;
     public Location actualLoc;
     public ListView lw;
-    private String Url="http://lu4kedr.xf.cz/TEST.txt";
 
     @Override
     public  void onResume()
@@ -66,21 +63,7 @@ public class MainActivity extends Activity {
 
         db = new DBHelper(this);
         lw = (ListView) findViewById(R.id.lv_itinerary);
-       /* DeliveryItem[] items = {
-                new DeliveryItem("Name1","Note","Address",2.343,4.3434,0,1),
-                new DeliveryItem("Name2","Note","Address",2.343,4.3434,2,2),
-                new DeliveryItem("Name3","Note","Address",2.343,4.3434,1,2),
-                new DeliveryItem("Name4","Note","Address",2.343,4.3434,1,1),
-                new DeliveryItem("Name5","Note","Address",2.343,4.3434,2,1),
 
-        };
-
-        for (DeliveryItem item: items) {
-            db.insertDelivery(item);
-        }*/
-
-     //  DeliveryItem itt= new DeliveryItem("Doma2","Luke","FM",49.680476,18.359500,0,1);
-       // db.insertDelivery(itt);
         lwAdapter = new CustomAdapter(this, db.getAllDelivery());
 
 
@@ -91,8 +74,6 @@ public class MainActivity extends Activity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        // Toast.makeText(getApplicationContext(),((DeliveryItem) parent.getItemAtPosition(position)).name,Toast.LENGTH_SHORT).show();
-
 
                         if (reorder) {
                             if (selecteditem1 < 0) {
@@ -116,9 +97,6 @@ public class MainActivity extends Activity {
                         } else {
                             if(id==-1) //Visited
                             {
-                                //Toast.makeText(getApplicationContext(),"Visited",Toast.LENGTH_SHORT).show();
-
-
                                 DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
                                 di.state=1;
                                 db.updateDelivery(di);
@@ -127,7 +105,6 @@ public class MainActivity extends Activity {
                             }
                             if(id==-2) // UnVisited
                             {
-                                // Toast.makeText(getApplicationContext(),"UN Visited",Toast.LENGTH_SHORT).show();
                                 DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
                                 di.state=2;
                                 db.updateDelivery(di);
@@ -221,27 +198,27 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                di=arr[i-1];
-                if(di.state==0)
-                {
-                    di.state=2;
-                    db.updateDelivery(di);
-                    if(mp.isPlaying())
-                    {
-                        mp.stop();
-                    }
+                if(i>1) {
+                    di = arr[i - 1];
+                    if (di.state == 0) {
+                        di.state = 2;
+                        db.updateDelivery(di);
+                        if (mp.isPlaying()) {
+                            mp.stop();
+                        }
 
-                    try {
-                        mp.reset();
-                        AssetFileDescriptor afd;
-                        afd = getAssets().openFd("missed.mp3");
-                        mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-                        mp.prepare();
-                        mp.start();
-                    } catch (IllegalStateException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        try {
+                            mp.reset();
+                            AssetFileDescriptor afd;
+                            afd = getAssets().openFd("missed.mp3");
+                            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+                            mp.prepare();
+                            mp.start();
+                        } catch (IllegalStateException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             }
@@ -297,17 +274,26 @@ public class MainActivity extends Activity {
 
                     LoadCSV();
                 break;
+            case R.id.menu_Settings:
+                Intent intent1=new Intent(getBaseContext(),dra0060.deliveryitinerary.Settings.class);
+                startActivity(intent1);
+                break;
         }
         return true;
     }
 
     private  void LoadCSV()
     {
+        if(dra0060.deliveryitinerary.Settings.CsvUrl==null){
+            Toast.makeText(getApplicationContext(),"CSV url missing",Toast.LENGTH_SHORT).show();
+
+            return;
+        }
         Thread thr = new Thread(new Runnable(){
 
             public void run(){
 
-                ReadWebCsv(Url,db);
+                ReadWebCsv(dra0060.deliveryitinerary.Settings.CsvUrl,db);
 
             }
         });

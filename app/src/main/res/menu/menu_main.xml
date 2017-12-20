@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
+<item
+    android:id="@+id/menu_reorder"
+    android:checkable="true"
+    android:enabled="true"
+    android:title="Reorder"
+    android:visible="true" />
+<item
+    android:id="@+id/menu_additem"
+    android:enabled="true"
+    android:title="Add"
+    android:visible="true" />
+<item
+    android:id="@+id/menu_reset"
+    android:enabled="true"
+    android:title="Reset"
+    android:visible="true" />
+<item
+    android:id="@+id/menu_Delete"
+    android:enabled="true"
+    android:title="Clear DB"
+    android:visible="true" />
+<item
+    android:id="@+id/menu_Refresh"
+    android:enabled="true"
+    android:title="Refresh"
+    android:visible="true" />
+<item
+    android:id="@+id/menu_csv2db"
+    android:enabled="true"
+    android:title="Load CSV"
+    android:visible="true" />
     <item
-        android:id="@+id/menu_reorder"
-        android:checkable="true"
+        android:id="@+id/menu_Settings"
         android:enabled="true"
-        android:title="Reorder"
+        android:title="Settings"
         android:visible="true" />
-    <item
-        android:id="@+id/menu_additem"
-        android:enabled="true"
-        android:title="Add"
-        android:visible="true" />
-    <item
-        android:id="@+id/menu_reset"
-        android:title="Reset" />
-    <item
-        android:id="@+id/menu_Delete"
-        android:enabled="true"
-        android:title="Clear DB"
-        android:visible="true" />
-    <item
-        android:id="@+id/menu_Refresh"
-        android:enabled="true"
-        android:title="Select CSV"
-        android:visible="true" />
-    <item
-        android:id="@+id/menu_csv2db"
-        android:title="Load CSV" />
 </menu>
