@@ -36,7 +36,15 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         // TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS contacts");
+       // db.execSQL("DROP TABLE IF EXISTS contacts");
+        db.execSQL(
+                "create table itinerary " +
+                        "(id integer primary key autoincrement, name text,address text,note text, gpslat double,gpslong double,district integer, state integer)"
+        );
+    }
+    public void DeleteAll(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS itinerary");
         db.execSQL(
                 "create table itinerary " +
                         "(id integer primary key autoincrement, name text,address text,note text, gpslat double,gpslong double,district integer, state integer)"

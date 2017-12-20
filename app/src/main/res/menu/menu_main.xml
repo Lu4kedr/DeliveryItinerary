@@ -16,4 +16,17 @@
     <item
         android:id="@+id/menu_reset"
         android:title="Reset" />
+    <item
+        android:id="@+id/menu_Delete"
+        android:enabled="true"
+        android:title="Clear DB"
+        android:visible="true" />
+    <item
+        android:id="@+id/menu_Refresh"
+        android:enabled="true"
+        android:title="Select CSV"
+        android:visible="true" />
+    <item
+        android:id="@+id/menu_csv2db"
+        android:title="Load CSV" />
 </menu>

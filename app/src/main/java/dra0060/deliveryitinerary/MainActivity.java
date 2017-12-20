@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +25,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity {
@@ -36,18 +42,19 @@ public class MainActivity extends Activity {
     public boolean reorder;
     public static DBHelper db = null;
     public CustomAdapter lwAdapter;
-
+    private String m_chosen;
     private LocationManager locManag;
     private LocationListener locLis;
     public Location actualLoc;
     public ListView lw;
+    private String Url="http://lu4kedr.xf.cz/TEST.txt";
 
     @Override
     public  void onResume()
     {
         super.onResume();
 
-        RefreshList(db.getAllDelivery());
+        RefreshList();
 
     }
 
@@ -101,7 +108,7 @@ public class MainActivity extends Activity {
                                 selecteditem2 = -666;
                                 selecteditem1 = -666;
 
-                                RefreshList(db.getAllDelivery());
+                                RefreshList();
 
 
                             }
@@ -115,7 +122,7 @@ public class MainActivity extends Activity {
                                 DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
                                 di.state=1;
                                 db.updateDelivery(di);
-                                RefreshList(db.getAllDelivery());
+                                RefreshList();
                                 return;
                             }
                             if(id==-2) // UnVisited
@@ -124,7 +131,7 @@ public class MainActivity extends Activity {
                                 DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
                                 di.state=2;
                                 db.updateDelivery(di);
-                                RefreshList(db.getAllDelivery());
+                                RefreshList();
                                 return;
                             }
 
@@ -238,12 +245,12 @@ public class MainActivity extends Activity {
                     }
                 }
             }
-            RefreshList(db.getAllDelivery());
+            RefreshList();
         }
     }
 
 
-    public void RefreshList(DeliveryItem[] items)
+    public void RefreshList()
     {
         int posit = lw.getLastVisiblePosition();
         lwAdapter= new CustomAdapter(this, db.getAllDelivery());
@@ -277,9 +284,77 @@ public class MainActivity extends Activity {
                     it.state=0;
                     db.updateDelivery(it);
                 }
-                RefreshList(arr);
+                RefreshList();
+                break;
+            case R.id.menu_Delete:
+                db.DeleteAll();
+                RefreshList();
+                break;
+            case R.id.menu_Refresh:
+                    RefreshList();
+                break;
+            case R.id.menu_csv2db:
+
+                    LoadCSV();
                 break;
         }
         return true;
     }
+
+    private  void LoadCSV()
+    {
+        Thread thr = new Thread(new Runnable(){
+
+            public void run(){
+
+                ReadWebCsv(Url,db);
+
+            }
+        });
+        thr.start();
+
+        try {
+            thr.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        db.getAllDelivery();
+    }
+
+    public void ReadWebCsv(String urlString, DBHelper db)
+    {
+        URLConnection feedUrl;
+        ArrayList<DeliveryItem> result = new ArrayList<DeliveryItem>();
+        DeliveryItem item;
+
+        try {
+            feedUrl = new URL(urlString).openConnection();
+            InputStream is = feedUrl.getInputStream();
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            String str=null;
+            while ((str = reader.readLine()) != null) {
+                String[] row =str.split(",");
+                if(row.length!=8)continue;
+                item= new DeliveryItem();
+                item.ID=Integer.parseInt(row[0]);
+                item.name=row[1];
+                item.address=row[2];
+                item.gpsLat=Double.parseDouble(row[3]);
+                item.gpsLong=Double.parseDouble(row[4]);
+                item.note=row[5];
+                item.state=Integer.parseInt(row[6]);
+                item.district=Integer.parseInt(row[7]);
+                result.add(item);
+            }
+            is.close();
+            for (DeliveryItem it:result) {
+                db.insertDelivery(it);
+            }
+
+        } catch (Exception e) {
+            Log.d("MyTag",e.toString());
+        }
+    }
+
 }
