@@ -131,6 +131,7 @@ public class MainActivity extends Activity {
         );
 
 
+
         locManag = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locLis = new LocationListener() {
             @Override

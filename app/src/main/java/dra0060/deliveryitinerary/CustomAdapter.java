@@ -84,6 +84,20 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
             }
         });
 
+        layout.setOnTouchListener(new OnSwipeTouchListener(context)
+        {
+            @Override
+            public void onSwipeLeft() {
+               // Toast.makeText(getContext(),"TEST",Toast.LENGTH_SHORT).show();
+                ((ListView)parent).performItemClick(null,position,-2);
+            }
+            @Override
+            public  void  onSwipeRight(){
+                ((ListView)parent).performItemClick(null,position,-1);
+            }
+        });
+
+
         visited.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
