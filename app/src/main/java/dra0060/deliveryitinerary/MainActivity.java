@@ -46,6 +46,16 @@ public class MainActivity extends Activity {
     public Location actualLoc;
     public ListView lw;
 
+    // TODO Parts
+    /*
+    * 1 - GUI -lsitview, fragments(google maps), gestures
+    * 2 - Concurrency - Thred - download csv file
+    * 3 - Database - SQLLite
+    * 4 - Multimedia - mp3 file play on DeliveryItem state change
+    * 5 - Geo - GPS use + show DeliveryItem on Google map
+    * 6 - Networking - download .csv from internet
+    * */
+
     @Override
     public  void onResume()
     {

@@ -156,8 +156,6 @@ public class DBHelper extends SQLiteOpenHelper {
             di.ID=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_ID));
             di.district=res.getInt(res.getColumnIndex(ITINERARY_COLUMN_DISTRICT));
 
-            // TODO load fromDB
-            // TODO list switch items
 
 
             array_list.add(di);
