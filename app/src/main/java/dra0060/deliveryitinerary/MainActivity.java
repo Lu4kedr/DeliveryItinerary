@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
                             {
                                 //Toast.makeText(getApplicationContext(),"Visited",Toast.LENGTH_SHORT).show();
 
-                                // TODO gesture
+
                                 DeliveryItem di=((DeliveryItem) parent.getItemAtPosition(position));
                                 di.state=1;
                                 db.updateDelivery(di);
@@ -173,7 +173,10 @@ public class MainActivity extends Activity {
     {
         Location tmp;
         DeliveryItem[] arr = db.getAllDelivery();
-        for (DeliveryItem di: arr) {
+        DeliveryItem di;
+        for(int i=0;i<arr.length;i++)
+         {
+            di=arr[i];
             tmp=new Location("tmp");
             tmp.setLatitude(di.gpsLat);
             tmp.setLongitude(di.gpsLong);
@@ -200,7 +203,29 @@ public class MainActivity extends Activity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                di=arr[i-1];
+                if(di.state==0)
+                {
+                    di.state=2;
+                    db.updateDelivery(di);
+                    if(mp.isPlaying())
+                    {
+                        mp.stop();
+                    }
 
+                    try {
+                        mp.reset();
+                        AssetFileDescriptor afd;
+                        afd = getAssets().openFd("missed.mp3");
+                        mp.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+                        mp.prepare();
+                        mp.start();
+                    } catch (IllegalStateException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
             RefreshList(db.getAllDelivery());
         }
@@ -228,13 +253,18 @@ public class MainActivity extends Activity {
                 reorder=item.isChecked();
 
                 break;
-            case R.id.AddItem:
+            case R.id.menu_additem:
                 Intent intent = new Intent(getApplicationContext(),AddDeliveryItem.class);
 
                 startActivity(intent);
                 break;
-            case R.id.menu_getloc:
-
+            case R.id.menu_reset:
+                DeliveryItem[] arr = db.getAllDelivery();
+                for (DeliveryItem it :arr ) {
+                    it.state=0;
+                    db.updateDelivery(it);
+                }
+                RefreshList(arr);
                 break;
         }
         return true;

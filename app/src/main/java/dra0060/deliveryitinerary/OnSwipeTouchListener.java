@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Created by lu4ke on 20.12.2017.
@@ -22,8 +23,14 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
     public void onSwipeRight() {
     }
+    public void onTouch(){
+
+    }
+
+
 
     public boolean onTouch(View v, MotionEvent event) {
+
         return gestureDetector.onTouchEvent(event);
     }
 
@@ -34,9 +41,14 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
 
         @Override
         public boolean onDown(MotionEvent e) {
+
             return true;
         }
-
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e){
+            onTouch();
+            return  true;
+        }
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();
