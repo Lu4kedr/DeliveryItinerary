@@ -26,6 +26,9 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
     public void onTouch(){
 
     }
+    public void onLongTouch(){
+
+    }
 
 
 
@@ -49,6 +52,12 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
             onTouch();
             return  true;
         }
+
+        @Override
+        public void onLongPress (MotionEvent e){
+            onLongTouch();
+        }
+
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             float distanceX = e2.getX() - e1.getX();

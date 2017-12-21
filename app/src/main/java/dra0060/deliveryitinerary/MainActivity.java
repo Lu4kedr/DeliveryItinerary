@@ -122,6 +122,7 @@ public class MainActivity extends Activity {
                                 return;
                             }
 
+
                             Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                             intent.putExtra("lat", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLat);
                             intent.putExtra("long", ((DeliveryItem) parent.getItemAtPosition(position)).gpsLong);

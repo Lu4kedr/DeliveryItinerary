@@ -78,6 +78,7 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
         layout.getBackground().setAlpha(20);
 
 
+
         layout.setOnTouchListener(new OnSwipeTouchListener(context)
         {
             @Override
@@ -91,7 +92,14 @@ class CustomAdapter extends ArrayAdapter<DeliveryItem> {
             }
             public void onTouch()
             {
+
                 ((ListView)parent).performItemClick(null,position,oneItem.ID);
+            }
+
+            public void onLongTouch()
+            {
+
+                ((ListView)parent).performItemClick(null,position,-666);
             }
         });
 
